@@ -83,6 +83,7 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="images\battleground.jpg" />
+    <Content Include="images\map.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
