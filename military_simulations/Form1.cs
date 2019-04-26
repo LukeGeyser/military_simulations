@@ -16,5 +16,17 @@ namespace military_simulations
         {
             InitializeComponent();
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics gr = this.CreateGraphics();
+            Pen p = new Pen(Color.Green, 5);
+            gr.DrawRectangle(p, 50, 50, 200, 200);
+        }
     }
 }
