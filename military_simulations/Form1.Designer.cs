@@ -33,6 +33,8 @@
             // 
             // panel1
             // 
+            this.panel1.BackgroundImage = global::military_simulations.Properties.Resources.battleground;
+            this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Location = new System.Drawing.Point(1, 0);
             this.panel1.Name = "panel1";
