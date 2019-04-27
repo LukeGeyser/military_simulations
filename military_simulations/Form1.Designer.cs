@@ -34,9 +34,10 @@
             this.tlt_Fuel = new System.Windows.Forms.ToolStripProgressBar();
             this.label1 = new System.Windows.Forms.Label();
             this.pnl_Obstacles = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.btn_enemyemplacements = new System.Windows.Forms.Button();
             this.btn_RPGsquads = new System.Windows.Forms.Button();
+            this.btn_enemyemplacements = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.btn_Start = new System.Windows.Forms.Button();
             this.toolStrip1.SuspendLayout();
             this.pnl_Obstacles.SuspendLayout();
             this.SuspendLayout();
@@ -48,7 +49,7 @@
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Location = new System.Drawing.Point(1, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(900, 851);
+            this.panel1.Size = new System.Drawing.Size(903, 854);
             this.panel1.TabIndex = 0;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.Panel1_Paint);
             this.panel1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Panel1_MouseClick);
@@ -101,15 +102,17 @@
             this.pnl_Obstacles.Size = new System.Drawing.Size(200, 366);
             this.pnl_Obstacles.TabIndex = 4;
             // 
-            // label2
+            // btn_RPGsquads
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(50, 16);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(93, 16);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "OBSTACLES";
+            this.btn_RPGsquads.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btn_RPGsquads.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_RPGsquads.Location = new System.Drawing.Point(44, 212);
+            this.btn_RPGsquads.Name = "btn_RPGsquads";
+            this.btn_RPGsquads.Size = new System.Drawing.Size(112, 93);
+            this.btn_RPGsquads.TabIndex = 7;
+            this.btn_RPGsquads.UseVisualStyleBackColor = false;
+            this.btn_RPGsquads.Paint += new System.Windows.Forms.PaintEventHandler(this.Btn_RPGsquads_Paint);
+            this.btn_RPGsquads.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Btn_RPGsquads_MouseClick);
             // 
             // btn_enemyemplacements
             // 
@@ -123,23 +126,34 @@
             this.btn_enemyemplacements.Paint += new System.Windows.Forms.PaintEventHandler(this.Button1_Paint);
             this.btn_enemyemplacements.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Btn_enemyemplacements_MouseClick);
             // 
-            // btn_RPGsquads
+            // label2
             // 
-            this.btn_RPGsquads.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btn_RPGsquads.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_RPGsquads.Location = new System.Drawing.Point(44, 212);
-            this.btn_RPGsquads.Name = "btn_RPGsquads";
-            this.btn_RPGsquads.Size = new System.Drawing.Size(112, 93);
-            this.btn_RPGsquads.TabIndex = 7;
-            this.btn_RPGsquads.UseVisualStyleBackColor = false;
-            this.btn_RPGsquads.Paint += new System.Windows.Forms.PaintEventHandler(this.Btn_RPGsquads_Paint);
-            this.btn_RPGsquads.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Btn_RPGsquads_MouseClick);
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(50, 16);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(93, 16);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "OBSTACLES";
+            // 
+            // btn_Start
+            // 
+            this.btn_Start.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_Start.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Start.Location = new System.Drawing.Point(1316, 697);
+            this.btn_Start.Name = "btn_Start";
+            this.btn_Start.Size = new System.Drawing.Size(138, 60);
+            this.btn_Start.TabIndex = 5;
+            this.btn_Start.Text = "Start A*";
+            this.btn_Start.UseVisualStyleBackColor = false;
+            this.btn_Start.Click += new System.EventHandler(this.Btn_Start_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1466, 918);
+            this.Controls.Add(this.btn_Start);
             this.Controls.Add(this.pnl_Obstacles);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.toolStrip1);
@@ -171,6 +185,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btn_RPGsquads;
         private System.Windows.Forms.Button btn_enemyemplacements;
+        private System.Windows.Forms.Button btn_Start;
     }
 }
 
