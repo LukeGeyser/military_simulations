@@ -18,6 +18,7 @@ namespace military_simulations
         private int width;
         private List<Cell> neighbors = new List<Cell>();
         private Cell previous = null;
+        private bool obstacle = false;
 
         public double F { get => f; set => f = value; }
         public double G { get => g; set => g = value; }
@@ -28,6 +29,7 @@ namespace military_simulations
         public int Width { get => width; set => width = value; }
         internal List<Cell> Neighbors { get => neighbors; set => neighbors = value; }
         internal Cell Previous { get => previous; set => previous = value; }
+        public bool Obstacle { get => obstacle; set => obstacle = value; }
 
         public Cell(int i, int j, int width)
         {
@@ -48,6 +50,15 @@ namespace military_simulations
                 neighbors.Add(grid[i, j + 1]);
             if (j > 0)
                 neighbors.Add(grid[i, j - 1]);
+            //Diagonals
+            if (i > 0 && j > 0)
+                neighbors.Add(grid[i - 1, j - 1]);
+            if (i < 17 - 1 && j > 0)
+                neighbors.Add(grid[i + 1, j - 1]);
+            if (i > 0 && j < 16 -1)
+                neighbors.Add(grid[i - 1, j + 1]);
+            if (i < 17 -1 && j < 16 -1)
+                neighbors.Add(grid[i + 1, j + 1]);
         }
 
     }
