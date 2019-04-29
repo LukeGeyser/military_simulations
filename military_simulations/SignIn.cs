@@ -12,9 +12,31 @@ namespace military_simulations
 {
     public partial class SignIn : Form
     {
+        DataHandler dh;
+        Player player;
+
         public SignIn()
         {
             InitializeComponent();
+            dh = new DataHandler();
+        }
+
+        private void SignIn_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Btn_SignIn_Click(object sender, EventArgs e)
+        {
+            dh = new DataHandler();
+            player = dh.GetPLayerLogin(txt_Username.Text);
+        }
+
+        private void Btn_SignUp_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            SignUp su = new SignUp();
+            su.Show();
         }
     }
 }

@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="aircraft.cs" />
     <Compile Include="Cell.cs" />
+    <Compile Include="DataHandler.cs" />
     <Compile Include="MilitaryGame.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -55,6 +56,7 @@
       <DependentUpon>MilitaryGame.cs</DependentUpon>
     </Compile>
     <Compile Include="InventoryItems.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignIn.cs">
@@ -62,6 +64,12 @@
     </Compile>
     <Compile Include="SignIn.Designer.cs">
       <DependentUpon>SignIn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SignUp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SignUp.Designer.cs">
+      <DependentUpon>SignUp.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="MilitaryGame.resx">
       <DependentUpon>MilitaryGame.cs</DependentUpon>
@@ -76,6 +84,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="SignIn.resx">
+      <DependentUpon>SignIn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SignUp.resx">
+      <DependentUpon>SignUp.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -91,6 +105,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="images\armybg.jpg" />
     <Content Include="images\battleground.jpg" />
     <Content Include="images\map.jpg" />
   </ItemGroup>
