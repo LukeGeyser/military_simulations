@@ -1,6 +1,6 @@
 ﻿namespace military_simulations
 {
-    partial class Form1
+    partial class MilitaryGame
     {
         /// <summary>
         /// Required designer variable.
@@ -38,8 +38,15 @@
             this.btn_enemyemplacements = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.btn_Start = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.tlt_Health = new System.Windows.Forms.ToolStripProgressBar();
+            this.tlb_Fuel = new System.Windows.Forms.ToolStripLabel();
+            this.tlb_Health = new System.Windows.Forms.ToolStripLabel();
+            this.btn_RemoveObs = new System.Windows.Forms.Button();
             this.toolStrip1.SuspendLayout();
             this.pnl_Obstacles.SuspendLayout();
+            this.toolStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -58,9 +65,9 @@
             // 
             this.btn_close.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_close.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_close.Location = new System.Drawing.Point(1316, 791);
+            this.btn_close.Location = new System.Drawing.Point(955, 705);
             this.btn_close.Name = "btn_close";
-            this.btn_close.Size = new System.Drawing.Size(138, 60);
+            this.btn_close.Size = new System.Drawing.Size(121, 25);
             this.btn_close.TabIndex = 1;
             this.btn_close.Text = "Close App";
             this.btn_close.UseVisualStyleBackColor = false;
@@ -70,8 +77,9 @@
             // 
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tlt_Fuel});
-            this.toolStrip1.Location = new System.Drawing.Point(913, 826);
+            this.tlt_Fuel,
+            this.tlb_Fuel});
+            this.toolStrip1.Location = new System.Drawing.Point(907, 779);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(214, 25);
             this.toolStrip1.TabIndex = 2;
@@ -86,7 +94,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(924, 804);
+            this.label1.Location = new System.Drawing.Point(924, 763);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(95, 16);
             this.label1.TabIndex = 3;
@@ -94,10 +102,11 @@
             // 
             // pnl_Obstacles
             // 
+            this.pnl_Obstacles.Controls.Add(this.btn_RemoveObs);
             this.pnl_Obstacles.Controls.Add(this.btn_RPGsquads);
             this.pnl_Obstacles.Controls.Add(this.btn_enemyemplacements);
             this.pnl_Obstacles.Controls.Add(this.label2);
-            this.pnl_Obstacles.Location = new System.Drawing.Point(1254, 12);
+            this.pnl_Obstacles.Location = new System.Drawing.Point(1055, 12);
             this.pnl_Obstacles.Name = "pnl_Obstacles";
             this.pnl_Obstacles.Size = new System.Drawing.Size(200, 366);
             this.pnl_Obstacles.TabIndex = 4;
@@ -140,19 +149,71 @@
             // 
             this.btn_Start.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_Start.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Start.Location = new System.Drawing.Point(1316, 697);
+            this.btn_Start.Location = new System.Drawing.Point(955, 655);
             this.btn_Start.Name = "btn_Start";
-            this.btn_Start.Size = new System.Drawing.Size(138, 60);
+            this.btn_Start.Size = new System.Drawing.Size(121, 25);
             this.btn_Start.TabIndex = 5;
-            this.btn_Start.Text = "Start A*";
+            this.btn_Start.Text = "Send Out Scout";
             this.btn_Start.UseVisualStyleBackColor = false;
             this.btn_Start.Click += new System.EventHandler(this.Btn_Start_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Arial Rounded MT Bold", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(924, 813);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(112, 16);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Aircraft Health:";
+            // 
+            // toolStrip2
+            // 
+            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tlt_Health,
+            this.tlb_Health});
+            this.toolStrip2.Location = new System.Drawing.Point(907, 829);
+            this.toolStrip2.Name = "toolStrip2";
+            this.toolStrip2.Size = new System.Drawing.Size(214, 25);
+            this.toolStrip2.TabIndex = 6;
+            this.toolStrip2.Text = "toolStrip2";
+            // 
+            // tlt_Health
+            // 
+            this.tlt_Health.Name = "tlt_Health";
+            this.tlt_Health.Size = new System.Drawing.Size(200, 22);
+            // 
+            // tlb_Fuel
+            // 
+            this.tlb_Fuel.Name = "tlb_Fuel";
+            this.tlb_Fuel.Size = new System.Drawing.Size(0, 22);
+            // 
+            // tlb_Health
+            // 
+            this.tlb_Health.Name = "tlb_Health";
+            this.tlb_Health.Size = new System.Drawing.Size(0, 22);
+            // 
+            // btn_RemoveObs
+            // 
+            this.btn_RemoveObs.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btn_RemoveObs.Cursor = System.Windows.Forms.Cursors.Default;
+            this.btn_RemoveObs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_RemoveObs.Location = new System.Drawing.Point(44, 323);
+            this.btn_RemoveObs.Name = "btn_RemoveObs";
+            this.btn_RemoveObs.Size = new System.Drawing.Size(112, 25);
+            this.btn_RemoveObs.TabIndex = 8;
+            this.btn_RemoveObs.Text = "Remove Obstacles";
+            this.btn_RemoveObs.UseVisualStyleBackColor = false;
+            this.btn_RemoveObs.Click += new System.EventHandler(this.Btn_RemoveObs_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1466, 918);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.toolStrip2);
             this.Controls.Add(this.btn_Start);
             this.Controls.Add(this.pnl_Obstacles);
             this.Controls.Add(this.label1);
@@ -169,6 +230,8 @@
             this.toolStrip1.PerformLayout();
             this.pnl_Obstacles.ResumeLayout(false);
             this.pnl_Obstacles.PerformLayout();
+            this.toolStrip2.ResumeLayout(false);
+            this.toolStrip2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -186,6 +249,12 @@
         private System.Windows.Forms.Button btn_RPGsquads;
         private System.Windows.Forms.Button btn_enemyemplacements;
         private System.Windows.Forms.Button btn_Start;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ToolStrip toolStrip2;
+        private System.Windows.Forms.ToolStripProgressBar tlt_Health;
+        private System.Windows.Forms.ToolStripLabel tlb_Fuel;
+        private System.Windows.Forms.ToolStripLabel tlb_Health;
+        private System.Windows.Forms.Button btn_RemoveObs;
     }
 }
 

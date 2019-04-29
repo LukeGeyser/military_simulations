@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace military_simulations
 {
-    public partial class Form1 : Form
+    public partial class MilitaryGame : Form
     {
 
         #region List Of Items To Draw
@@ -25,6 +25,8 @@ namespace military_simulations
         #region Booleans
         private bool initialLoad = false;
         private bool aStarRan = false;
+        private bool initialFlight = false;
+        private bool crashed = false;
         #endregion
 
         #region Home Base Points
@@ -57,6 +59,7 @@ namespace military_simulations
         #region Variables for Selecting Obstacles
         private bool enemyPlacementsClicked = false;
         private bool rpgSquads = false;
+        private bool removeObstacles = false;
         #endregion
 
         #region Grid Variables
@@ -70,8 +73,6 @@ namespace military_simulations
         List<Cell> path = new List<Cell>();
         Cell start;
         Cell end;
-        int cellIndexX;
-        int cellIndexY;
         #endregion
 
         private void PopulateHomeBase()
@@ -95,10 +96,13 @@ namespace military_simulations
             listOfEnemyBase.Add(new Cell(ep8.X, ep8.Y, width));
         }
 
-        public Form1()
+        public MilitaryGame()
         {
             InitializeComponent();            
             tlt_Fuel.Value = 100;
+            tlb_Fuel.Text = tlt_Fuel.Value + "%";
+            tlt_Health.Value = 100;
+            tlb_Health.Text = tlt_Health.Value + "%";
             PopulateHomeBase();
             PopulateEnemyBase();            
         }
@@ -165,34 +169,6 @@ namespace military_simulations
             // REDRAW
             else if (initialLoad == true)
             {
-                for (int i = 0; i < gridX; i++)
-                {
-                    for (int j = 0; j < gridY; j++)
-                    {                        
-                        if (rectanglesReDraw[i ,j].Obstacle == true)
-                        {
-                            if (enemyPlacementsClicked == true)
-                            {
-                                Cell cell = new Cell(i, j, width);
-                                rectanglesReDraw[i, j] = cell;
-                                //e.Graphics.DrawRectangle(new Pen(Color.Violet, 3), cell.Rec);
-                            }
-                            else if (rpgSquads == true)
-                            {
-                                Cell cell = new Cell(i, j, width);
-                                rectanglesReDraw[i, j] = cell;
-                                //e.Graphics.DrawRectangle(new Pen(Color.Orange, 3), cell.Rec);
-                            }
-                        }
-                        else
-                        {
-                            //Cell cell = new Cell(i, j, width);
-                            //grid[i, j] = cell;
-                            //e.Graphics.DrawRectangle(new Pen(Color.Black, 2), cell.Rec);
-                        }
-                    }
-                }
-
                 // Adding Obstacles
                 if (enemyPlacementsClicked == true)
                 {
@@ -230,13 +206,7 @@ namespace military_simulations
                 if (aStarRan == true)
                 {
                     // Draw Path
-                    int pathLength = path.Count;
-                    foreach (var pathItem in path)
-                    {
-                        e.Graphics.DrawRectangle(new Pen(Color.Blue, 3), pathItem.Rec);
-                        tlt_Fuel.ProgressBar.Value -= 2;
-                        Thread.Sleep(100);
-                    }
+                    FlightPath(e, path);
                     aStarRan = false;
                 }
 
@@ -270,10 +240,28 @@ namespace military_simulations
                 panel1.Invalidate();
                 //MessageBox.Show(enemyPlacementsClicked + " " + rpgSquads);
             }
+            else if (enemyPlacementsClicked == false && rpgSquads == false && removeObstacles == true)
+            {
+                SetStyle(ControlStyles.ResizeRedraw, true);
+                for (int i = 0; i < gridX; i++)
+                {
+                    for (int j = 0; j < gridY; j++)
+                    {
+                        Point point = new Point(MousePosition.X, MousePosition.Y);
+                        if (rectanglesReDraw[i, j].Rec.Contains(point))
+                        {
+                            obstacleIndexX = i;
+                            obstacleIndexY = j;
+                            rectanglesReDraw[i, j].Obstacle = true;
+                        }
+                    }
+                }                
+                panel1.Invalidate();
+            }
             else if (enemyPlacementsClicked == false && rpgSquads == false)
             {
                 MessageBox.Show("Please Select an Obstacle");
-            }            
+            }
         }
 
         // Closes Application
@@ -301,6 +289,7 @@ namespace military_simulations
         #region OBSTACLES CLICKED
         private void Btn_enemyemplacements_MouseClick(object sender, MouseEventArgs e)
         {
+            removeObstacles = false;
             if (enemyPlacementsClicked == false)
             {
                 if (rpgSquads == true)
@@ -309,8 +298,13 @@ namespace military_simulations
                     btn_enemyemplacements.Focus();
                     rpgSquads = false;
                 }
-                btn_enemyemplacements.BackColor = Color.Gray;                
-                enemyPlacementsClicked = true;                
+                btn_enemyemplacements.BackColor = Color.Gray;
+                if (!btn_RemoveObs.Focused)
+                {
+                    btn_RemoveObs.BackColor = Color.White;
+                    btn_enemyemplacements.Focus();
+                }
+                enemyPlacementsClicked = true;
             }
             else if (enemyPlacementsClicked == true)
             {
@@ -322,6 +316,7 @@ namespace military_simulations
 
         private void Btn_RPGsquads_MouseClick(object sender, MouseEventArgs e)
         {
+            removeObstacles = false;
             if (rpgSquads == false)
             {
                 if (enemyPlacementsClicked == true)
@@ -330,7 +325,12 @@ namespace military_simulations
                     btn_RPGsquads.Focus();
                     enemyPlacementsClicked = false;
                 }
-                btn_RPGsquads.BackColor = Color.Gray;                
+                btn_RPGsquads.BackColor = Color.Gray;
+                if (!btn_RemoveObs.Focused)
+                {
+                    btn_RemoveObs.BackColor = Color.White;
+                    btn_RPGsquads.Focus();
+                }
                 rpgSquads = true;
             }
             else if (rpgSquads == true)
@@ -340,10 +340,52 @@ namespace military_simulations
                 panel1.Focus();
             }
         }
+
+        private void Btn_RemoveObs_Click(object sender, EventArgs e)
+        {
+            if (btn_RemoveObs.Focused)
+            {
+                removeObstacles = true;
+                rpgSquads = false;
+                enemyPlacementsClicked = false;
+                btn_RemoveObs.BackColor = Color.Gray;
+            }
+            if (!btn_enemyemplacements.Focused)
+            {
+                btn_enemyemplacements.BackColor = Color.White;
+            }
+            if (!btn_RPGsquads.Focused)
+            {
+                btn_RPGsquads.BackColor = Color.White;
+            }
+            for (int i = 0; i < gridX; i++)
+            {
+                for (int j = 0; j < gridY; j++)
+                {
+                    if (rectanglesReDraw[i, j].Obstacle == true)
+                    {
+                        rectanglesReDraw[i, j].Obstacle = false;
+                    }
+                }
+            }
+            listOfEnemiesPlacements.Clear();
+            listOfRPGSquads.Clear();
+            panel1.Invalidate();
+        }
         #endregion
 
         private void Btn_Start_Click(object sender, EventArgs e)
         {
+            closedSet = new List<Cell>(); ;
+            openSet = new List<Cell>();
+            // Initializing Start
+            start = new Cell(17, 16, width);
+            start.AddNeighbors(rectanglesReDraw);
+            openSet.Add(start);
+            // Initializing End
+            end = new Cell(0, 0, width);
+            end.AddNeighbors(rectanglesReDraw);
+            path = new List<Cell>();
             aStarRan = true;
             // A* Algorithm
             while (openSet.Count > 0)
@@ -364,6 +406,7 @@ namespace military_simulations
                 for (int i = 0; i < neighbors.Count; i++)
                 {
                     Cell neighbor = neighbors[i];
+
                     if (!closedSet.Contains(neighbor) && !neighbor.Obstacle)
                     {
                         double tempG = current.G + 1;
@@ -388,9 +431,7 @@ namespace military_simulations
                             neighbor.F = neighbor.G + neighbor.H;
                             neighbor.Previous = current;
                         }
-                        
                     }
-
                 }
 
                 if (current.I == end.I && current.J == end.J)
@@ -403,15 +444,14 @@ namespace military_simulations
                         path.Add(temp.Previous);
                         temp = temp.Previous;
                     }
-                    MessageBox.Show("DONE!!", "Information");
+                    panel1.Invalidate();
+                    //MessageBox.Show("DONE!!", "Information");
                     break;
                 }
                 
 
                 openSet.Remove(current);
-                closedSet.Add(current);
-
-                panel1.Invalidate();
+                closedSet.Add(current);                
             }
 
             if (openSet.Count <= 0)
@@ -425,6 +465,102 @@ namespace military_simulations
         {
             double d = Math.Sqrt(Math.Pow((end.I - neighbor.I), 2) + Math.Pow((end.J - neighbor.J), 2));
             return d;
+        }
+
+        private void FlightPath(PaintEventArgs e, List<Cell> path)
+        {
+            if (initialFlight == true)
+            {
+                btn_Start.Text = "Send Out Scout";
+                foreach (var pathItem in path)
+                {
+                    e.Graphics.DrawRectangle(new Pen(Color.Blue, 3), pathItem.Rec);
+                    try
+                    {
+                        tlt_Fuel.ProgressBar.Value -= 1;
+                        tlb_Fuel.Text = tlt_Fuel.Value + "%";
+                        Thread.Sleep(100);
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("You Have Run Out Of Fuel", "CRASH!!!");
+                        break;
+                    }
+                    foreach (var item in pathItem.Neighbors)
+                    {
+                        if (item.Obstacle)
+                        {
+                            try
+                            {
+                                tlt_Health.Value -= 5;
+                                tlb_Health.Text = tlt_Health.Value + "%";
+                                if (tlt_Health.Value == 0)
+                                {
+                                    MessageBox.Show("You have been Shot Down", "CRASH!!!");
+                                    crashed = true;
+                                    break;
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                MessageBox.Show("You have been Shot Down", "CRASH!!!");
+                                crashed = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (crashed == true)
+                        break;
+                }
+                initialFlight = false;
+            }
+            else if (initialFlight == false)
+            {
+                btn_Start.Text = "Bring Back Scout";
+                path.Reverse();
+                
+                foreach (var pathItem in path)
+                {
+                    e.Graphics.DrawRectangle(new Pen(Color.Blue, 3), pathItem.Rec);
+                    try
+                    {
+                        tlt_Fuel.ProgressBar.Value -= 1;
+                        tlb_Fuel.Text = tlt_Fuel.Value + "%";
+                        Thread.Sleep(100);
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("You Have Run Out Of Fuel", "CRASH!!!");
+                        break;
+                    }
+                    foreach (var item in pathItem.Neighbors)
+                    {
+                        if (item.Obstacle)
+                        {
+                            try
+                            {
+                                tlt_Health.Value -= 5;
+                                tlb_Health.Text = tlt_Health.Value + "%";
+                                if (tlt_Health.Value == 0)
+                                {
+                                    MessageBox.Show("You have been Shot Down", "CRASH!!!");
+                                    crashed = true;
+                                    break;
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                MessageBox.Show("You have been Shot Down", "CRASH!!!");
+                                crashed = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (crashed == true)
+                        break;
+                }                
+                initialFlight = true;
+            }
         }
     }
 }
