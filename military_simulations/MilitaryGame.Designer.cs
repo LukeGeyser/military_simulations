@@ -32,8 +32,10 @@
             this.btn_close = new System.Windows.Forms.Button();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tlt_Fuel = new System.Windows.Forms.ToolStripProgressBar();
+            this.tlb_Fuel = new System.Windows.Forms.ToolStripLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.pnl_Obstacles = new System.Windows.Forms.Panel();
+            this.btn_RemoveObs = new System.Windows.Forms.Button();
             this.btn_RPGsquads = new System.Windows.Forms.Button();
             this.btn_enemyemplacements = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -41,9 +43,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.tlt_Health = new System.Windows.Forms.ToolStripProgressBar();
-            this.tlb_Fuel = new System.Windows.Forms.ToolStripLabel();
             this.tlb_Health = new System.Windows.Forms.ToolStripLabel();
-            this.btn_RemoveObs = new System.Windows.Forms.Button();
+            this.btn_Signout = new System.Windows.Forms.Button();
             this.toolStrip1.SuspendLayout();
             this.pnl_Obstacles.SuspendLayout();
             this.toolStrip2.SuspendLayout();
@@ -90,6 +91,11 @@
             this.tlt_Fuel.Name = "tlt_Fuel";
             this.tlt_Fuel.Size = new System.Drawing.Size(200, 22);
             // 
+            // tlb_Fuel
+            // 
+            this.tlb_Fuel.Name = "tlb_Fuel";
+            this.tlb_Fuel.Size = new System.Drawing.Size(0, 22);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -110,6 +116,19 @@
             this.pnl_Obstacles.Name = "pnl_Obstacles";
             this.pnl_Obstacles.Size = new System.Drawing.Size(200, 366);
             this.pnl_Obstacles.TabIndex = 4;
+            // 
+            // btn_RemoveObs
+            // 
+            this.btn_RemoveObs.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btn_RemoveObs.Cursor = System.Windows.Forms.Cursors.Default;
+            this.btn_RemoveObs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_RemoveObs.Location = new System.Drawing.Point(44, 323);
+            this.btn_RemoveObs.Name = "btn_RemoveObs";
+            this.btn_RemoveObs.Size = new System.Drawing.Size(112, 25);
+            this.btn_RemoveObs.TabIndex = 8;
+            this.btn_RemoveObs.Text = "Remove Obstacles";
+            this.btn_RemoveObs.UseVisualStyleBackColor = false;
+            this.btn_RemoveObs.Click += new System.EventHandler(this.Btn_RemoveObs_Click);
             // 
             // btn_RPGsquads
             // 
@@ -149,7 +168,7 @@
             // 
             this.btn_Start.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_Start.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Start.Location = new System.Drawing.Point(955, 655);
+            this.btn_Start.Location = new System.Drawing.Point(955, 624);
             this.btn_Start.Name = "btn_Start";
             this.btn_Start.Size = new System.Drawing.Size(121, 25);
             this.btn_Start.TabIndex = 5;
@@ -184,34 +203,29 @@
             this.tlt_Health.Name = "tlt_Health";
             this.tlt_Health.Size = new System.Drawing.Size(200, 22);
             // 
-            // tlb_Fuel
-            // 
-            this.tlb_Fuel.Name = "tlb_Fuel";
-            this.tlb_Fuel.Size = new System.Drawing.Size(0, 22);
-            // 
             // tlb_Health
             // 
             this.tlb_Health.Name = "tlb_Health";
             this.tlb_Health.Size = new System.Drawing.Size(0, 22);
             // 
-            // btn_RemoveObs
+            // btn_Signout
             // 
-            this.btn_RemoveObs.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btn_RemoveObs.Cursor = System.Windows.Forms.Cursors.Default;
-            this.btn_RemoveObs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_RemoveObs.Location = new System.Drawing.Point(44, 323);
-            this.btn_RemoveObs.Name = "btn_RemoveObs";
-            this.btn_RemoveObs.Size = new System.Drawing.Size(112, 25);
-            this.btn_RemoveObs.TabIndex = 8;
-            this.btn_RemoveObs.Text = "Remove Obstacles";
-            this.btn_RemoveObs.UseVisualStyleBackColor = false;
-            this.btn_RemoveObs.Click += new System.EventHandler(this.Btn_RemoveObs_Click);
+            this.btn_Signout.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_Signout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Signout.Location = new System.Drawing.Point(955, 664);
+            this.btn_Signout.Name = "btn_Signout";
+            this.btn_Signout.Size = new System.Drawing.Size(121, 25);
+            this.btn_Signout.TabIndex = 8;
+            this.btn_Signout.Text = "Sign Out";
+            this.btn_Signout.UseVisualStyleBackColor = false;
+            this.btn_Signout.Click += new System.EventHandler(this.Btn_Signout_Click);
             // 
-            // Form1
+            // MilitaryGame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1466, 918);
+            this.Controls.Add(this.btn_Signout);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.toolStrip2);
             this.Controls.Add(this.btn_Start);
@@ -223,7 +237,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Form1";
+            this.Name = "MilitaryGame";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.toolStrip1.ResumeLayout(false);
@@ -255,6 +269,7 @@
         private System.Windows.Forms.ToolStripLabel tlb_Fuel;
         private System.Windows.Forms.ToolStripLabel tlb_Health;
         private System.Windows.Forms.Button btn_RemoveObs;
+        private System.Windows.Forms.Button btn_Signout;
     }
 }
 

@@ -562,5 +562,12 @@ namespace military_simulations
                 initialFlight = true;
             }
         }
+
+        private void Btn_Signout_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            SignIn signIn = new SignIn();
+            signIn.Show();
+        }
     }
 }

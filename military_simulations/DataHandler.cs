@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.OleDb;
+using System.Windows.Forms;
 
 namespace military_simulations
 {
@@ -21,7 +22,7 @@ namespace military_simulations
 
         public Player GetPLayerLogin(string p1)
         {
-            Player player;
+            Player player = null;
 
             conn.Open();
             OleDbCommand cmd = new OleDbCommand("SELECT * FROM tblPlayers WHERE username=" + "'" + p1 + "'", conn);
@@ -30,7 +31,18 @@ namespace military_simulations
             dr = cmd.ExecuteReader();
             dr.Read();
 
-            player = new Player(int.Parse(dr["id"].ToString()), dr["Name"].ToString(), dr["username"].ToString(), dr["password"].ToString(), dr["DOB"].ToString());
+            try
+            {
+                player = new Player(int.Parse(dr["id"].ToString()), dr["Name"].ToString(), dr["username"].ToString(), dr["password"].ToString(), dr["DOB"].ToString());
+            }
+            catch (InvalidOperationException)
+            {
+                
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Please make sure you fill all Inputs");
+            }
 
             cmd.Dispose();
             conn.Close();
