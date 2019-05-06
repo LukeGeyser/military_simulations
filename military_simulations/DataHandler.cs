@@ -37,7 +37,7 @@ namespace military_simulations
             }
             catch (InvalidOperationException)
             {
-                
+
             }
             catch (Exception)
             {

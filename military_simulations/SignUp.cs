@@ -48,7 +48,6 @@ namespace military_simulations
 
         private bool CheckDates(DateTime dtp)
         {
-            
             int r = DateTime.Now.Year - dtp.Year;
             if (r >= 16)
             {
@@ -56,7 +55,7 @@ namespace military_simulations
             }
             else
                 return false;
-        } 
+        }
 
     }
 }

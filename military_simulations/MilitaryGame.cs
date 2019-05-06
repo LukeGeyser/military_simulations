@@ -76,13 +76,25 @@ namespace military_simulations
         Cell end;
         #endregion
 
+        #region Aircraft Variables
+        a394Jet a394Jet;
+        cb478Jet cb478Jet;
+        List<double> allRecordedSpeeds = new List<double>();
+        List<double> allRecordedAltitudes = new List<double>();
+        List<double> recordedHealth = new List<double>();
+        List<double> recordedFuel = new List<double>();
+        double tempSpeed = 0;
+        double tempAltitude = 0;
+        bool noSolution = false;
+        #endregion
+
         private void PopulateHomeBase()
         {
             listOfHomeBase.Add(new Cell(hp1.X, hp1.Y, width));
             listOfHomeBase.Add(new Cell(hp2.X, hp2.Y, width));
             listOfHomeBase.Add(new Cell(hp3.X, hp3.Y, width));
             listOfHomeBase.Add(new Cell(hp4.X, hp4.Y, width));
-            listOfHomeBase.Add(new Cell(hp5.X, hp5.Y, width));          
+            listOfHomeBase.Add(new Cell(hp5.X, hp5.Y, width));
         }
 
         private void PopulateEnemyBase()
@@ -97,15 +109,34 @@ namespace military_simulations
             listOfEnemyBase.Add(new Cell(ep8.X, ep8.Y, width));
         }
 
-        public MilitaryGame()
+        public MilitaryGame(string aircraftType)
         {
-            InitializeComponent();            
+            InitializeComponent();
+            if (aircraftType == "a394Jet")
+            {
+                a394Jet = new a394Jet();
+            }
+            else if (aircraftType == "cb478Jet")
+            {
+                cb478Jet = new cb478Jet();
+            }
             tlt_Fuel.Value = 100;
             tlb_Fuel.Text = tlt_Fuel.Value + "%";
             tlt_Health.Value = 100;
             tlb_Health.Text = tlt_Health.Value + "%";
             PopulateHomeBase();
-            PopulateEnemyBase();            
+            PopulateEnemyBase();
+        }
+
+        public MilitaryGame()
+        {
+            InitializeComponent();
+            tlt_Fuel.Value = 100;
+            tlb_Fuel.Text = tlt_Fuel.Value + "%";
+            tlt_Health.Value = 100;
+            tlb_Health.Text = tlt_Health.Value + "%";
+            PopulateHomeBase();
+            PopulateEnemyBase();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -122,14 +153,14 @@ namespace military_simulations
             if (initialLoad == false)
             {
                 initialLoad = true;
-                // Display Grid                                                
+                // Display Grid
                 for (int i = 0; i < gridX; i++)
                 {
                     for (int j = 0; j < gridY; j++)
                     {
                         Cell cell = new Cell(i, j , width);
                         grid[i, j] = cell;
-                        e.Graphics.DrawRectangle(new Pen(Color.Black, 2), cell.Rec);                        
+                        e.Graphics.DrawRectangle(new Pen(Color.Black, 2), cell.Rec);
                     }
                 }
 
@@ -197,7 +228,7 @@ namespace military_simulations
                     e.Graphics.FillRectangle(tx, enemies.Rec);
                 }
 
-                // Display all RPG Sqauds
+                // Display all RPG Squads
                 foreach (var rpg in listOfRPGSquads)
                 {
                     Image img = Image.FromFile(@"C:\Users\User-pc\Desktop\military_simulations_Project\military_simulations\military_simulations\images\tank.png");
@@ -237,7 +268,7 @@ namespace military_simulations
                 e.Graphics.DrawRectangle(new Pen(Color.Gold, 3), start.Rec);
                 // Draw End
                 e.Graphics.DrawRectangle(new Pen(Color.HotPink, 3), end.Rec);
-                
+
             }
         }
 
@@ -259,7 +290,7 @@ namespace military_simulations
                             rectanglesReDraw[i, j].Obstacle = true;
                         }
                     }
-                }                
+                }
                 panel1.Invalidate();
                 //MessageBox.Show(enemyPlacementsClicked + " " + rpgSquads);
             }
@@ -278,7 +309,7 @@ namespace military_simulations
                             rectanglesReDraw[i, j].Obstacle = true;
                         }
                     }
-                }                
+                }
                 panel1.Invalidate();
             }
             else if (enemyPlacementsClicked == false && rpgSquads == false)
@@ -327,7 +358,7 @@ namespace military_simulations
             e.Graphics.FillRectangle(tx, rec);
             //e.Graphics.DrawRectangle(new Pen(Color.Orange, 2), rec);
         }
-        #endregion 
+        #endregion
 
         #region OBSTACLES CLICKED
         private void Btn_enemyemplacements_MouseClick(object sender, MouseEventArgs e)
@@ -457,7 +488,7 @@ namespace military_simulations
                         if (openSet.Contains(neighbor))
                         {
                             if (tempG < neighbor.G)
-                            { 
+                            {
                                 neighbor.G = tempG;
                                 newPath = true;
                             }
@@ -491,16 +522,17 @@ namespace military_simulations
                     //MessageBox.Show("DONE!!", "Information");
                     break;
                 }
-                
+
 
                 openSet.Remove(current);
-                closedSet.Add(current);                
+                closedSet.Add(current);
             }
 
             if (openSet.Count <= 0)
             {
                 // No Solution
                 MessageBox.Show("NO SOLUTION", "Information");
+                noSolution = true;
             }
         }
 
@@ -512,17 +544,23 @@ namespace military_simulations
 
         private void FlightPath(PaintEventArgs e, List<Cell> path)
         {
+            int counter = 0;
             if (initialFlight == true)
             {
                 btn_Start.Text = "Send Out Scout";
                 foreach (var pathItem in path)
                 {
+
                     e.Graphics.DrawRectangle(new Pen(Color.Blue, 3), pathItem.Rec);
                     try
                     {
                         tlt_Fuel.ProgressBar.Value -= 1;
+                        recordedFuel.Add(tlt_Fuel.ProgressBar.Value);
                         tlb_Fuel.Text = tlt_Fuel.Value + "%";
                         Thread.Sleep(100);
+                        // To Determine the Speed and Altitude of Aircraft
+                        counter++;
+                        DetermineSpeedAndAltitude(path, counter);
                     }
                     catch (Exception)
                     {
@@ -535,7 +573,8 @@ namespace military_simulations
                         {
                             try
                             {
-                                tlt_Health.Value -= 5;
+                                tlt_Health.ProgressBar.Value -= 5;
+                                recordedHealth.Add(tlt_Health.ProgressBar.Value);
                                 tlb_Health.Text = tlt_Health.Value + "%";
                                 if (tlt_Health.Value == 0)
                                 {
@@ -561,15 +600,20 @@ namespace military_simulations
             {
                 btn_Start.Text = "Bring Back Scout";
                 path.Reverse();
-                
+
                 foreach (var pathItem in path)
                 {
                     e.Graphics.DrawRectangle(new Pen(Color.Blue, 3), pathItem.Rec);
+
                     try
                     {
                         tlt_Fuel.ProgressBar.Value -= 1;
+                        recordedFuel.Add(tlt_Fuel.ProgressBar.Value);
                         tlb_Fuel.Text = tlt_Fuel.Value + "%";
                         Thread.Sleep(100);
+                        // To Determine the Speed and Altitude of Aircraft
+                        counter++;
+                        DetermineSpeedAndAltitude(path, counter);
                     }
                     catch (Exception)
                     {
@@ -582,7 +626,8 @@ namespace military_simulations
                         {
                             try
                             {
-                                tlt_Health.Value -= 5;
+                                tlt_Health.ProgressBar.Value -= 5;
+                                recordedHealth.Add(tlt_Health.ProgressBar.Value);
                                 tlb_Health.Text = tlt_Health.Value + "%";
                                 if (tlt_Health.Value == 0)
                                 {
@@ -601,7 +646,7 @@ namespace military_simulations
                     }
                     if (crashed == true)
                         break;
-                }                
+                }
                 initialFlight = true;
             }
         }
@@ -611,6 +656,115 @@ namespace military_simulations
             this.Close();
             SignIn signIn = new SignIn();
             signIn.Show();
+        }
+
+        private void DetermineSpeedAndAltitude(List<Cell> path, int counter)
+        {
+            if (a394Jet != null)
+            {
+                if (counter == 1)
+                {
+                    allRecordedSpeeds.Add(a394Jet.Currentspeed);
+                    allRecordedAltitudes.Add(a394Jet.CurrentAltitude);
+                }
+
+                if (a394Jet.CurrentAltitude < 5000)
+                {
+                    tempSpeed += a394Jet.AccelerationSpeed + 10;
+                    tempAltitude += 1000;
+                }
+                else if (a394Jet.CurrentAltitude >= 5000 && a394Jet.CurrentAltitude < 15000)
+                {
+                    tempSpeed += a394Jet.AccelerationSpeed;
+                    tempAltitude += 800;
+                }
+                else if (a394Jet.CurrentAltitude >= 15000 && a394Jet.CurrentAltitude < 38000)
+                {
+                    tempSpeed += a394Jet.AccelerationSpeed - 10;
+                    if ((tempAltitude += 500) > 38000)
+                    {
+                        tempAltitude = 38000;
+                    }
+                    else
+                    {
+                        tempAltitude += 500;
+                    }
+                }
+
+                if (a394Jet.Currentspeed >= a394Jet.MaxSpeed)
+                {
+                    tempSpeed = a394Jet.MaxSpeed;
+                }
+
+                a394Jet.Currentspeed = tempSpeed;
+                a394Jet.CurrentAltitude = tempAltitude;
+
+                txt_Speed.Text = a394Jet.Currentspeed.ToString();
+                txt_Altitude.Text = a394Jet.CurrentAltitude.ToString();
+
+                allRecordedSpeeds.Add(a394Jet.Currentspeed);
+                allRecordedAltitudes.Add(a394Jet.CurrentAltitude);
+            }
+            else if (cb478Jet != null)
+            {
+                if (counter == 1)
+                {
+                    allRecordedSpeeds.Add(cb478Jet.Currentspeed);
+                    allRecordedAltitudes.Add(cb478Jet.CurrentAltitude);
+                }
+
+                if (cb478Jet.CurrentAltitude < 5000)
+                {
+                    tempSpeed += cb478Jet.AccelerationSpeed + 10;
+                    tempAltitude += 1100;
+                }
+                else if (cb478Jet.CurrentAltitude >= 5000 && cb478Jet.CurrentAltitude < 15000)
+                {
+                    tempSpeed += cb478Jet.AccelerationSpeed;
+                    tempAltitude += 750;
+                }
+                else if (cb478Jet.CurrentAltitude >= 15000 && cb478Jet.CurrentAltitude < 39000)
+                {
+                    tempSpeed += cb478Jet.AccelerationSpeed - 10;
+                    if ((tempAltitude += 625) > 39000)
+                    {
+                        tempAltitude = 38000;
+                    }
+                    else
+                    {
+                        tempAltitude += 625;
+                    }
+                }
+
+                if (cb478Jet.Currentspeed >= cb478Jet.MaxSpeed)
+                {
+                    tempSpeed = cb478Jet.MaxSpeed;
+                }
+
+                cb478Jet.Currentspeed = tempSpeed;
+                cb478Jet.CurrentAltitude = tempAltitude;
+
+                txt_Speed.Text = cb478Jet.Currentspeed.ToString();
+                txt_Altitude.Text = cb478Jet.CurrentAltitude.ToString();
+
+                allRecordedSpeeds.Add(cb478Jet.Currentspeed);
+                allRecordedAltitudes.Add(cb478Jet.CurrentAltitude);
+            }
+        }
+
+        private void Txt_Speed_TextChanged(object sender, EventArgs e)
+        {
+            txt_Speed.Text = tempSpeed.ToString();
+        }
+
+        private void Btn_GetResults_Click(object sender, EventArgs e)
+        {
+            if (allRecordedSpeeds.Count > 0 || allRecordedAltitudes.Count > 0 || recordedHealth.Count > 0 || recordedFuel.Count > 0)
+            {
+                GameResults gameResults = new GameResults(allRecordedSpeeds, allRecordedAltitudes, recordedHealth, recordedFuel);
+                this.Hide();
+                gameResults.Show();
+            }
         }
     }
 }

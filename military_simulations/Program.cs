@@ -16,7 +16,7 @@ namespace military_simulations
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MilitaryGame());
+            Application.Run(new PickAircraft());
         }
     }
 }
