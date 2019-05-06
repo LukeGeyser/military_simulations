@@ -29,10 +29,10 @@ namespace military_simulations
                 if (CheckDates(dt) == true)
                 {
                     player = new Player(txt_Name.Text, txt_Username.Text, txt_Password.Text, dtp_Player.Value.ToString("yyyy-MM-dd"));
-                    MessageBox.Show("Player Added Succesfully", "TIME TO GAME!!");
+                    MessageBox.Show("Player Added Successfully", "TIME TO GAME!!");
                     dh.AddPlayer(player);
                     this.Hide();
-                    MilitaryGame sn = new MilitaryGame();
+                    PickAircraft sn = new PickAircraft();
                     sn.Show();
                 }
                 else if (CheckDates(dt) == false)

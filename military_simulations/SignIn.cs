@@ -44,9 +44,9 @@ namespace military_simulations
                 }
                 else if (txt_Username.Text == player.Username || txt_Password.Text == player.Password)
                 {
-                    MessageBox.Show("Successful Signin", "Successful");
+                    MessageBox.Show("Successful Sign In", "Successful");
                     this.Hide();
-                    MilitaryGame mg = new MilitaryGame();
+                    PickAircraft mg = new PickAircraft();
                     mg.Show();
                 }
             }
