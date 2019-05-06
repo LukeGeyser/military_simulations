@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using System.Drawing.Drawing2D;
 
 namespace military_simulations
 {
@@ -182,13 +183,35 @@ namespace military_simulations
                 // Display all Enemy Placements
                 foreach (var enemies in listOfEnemiesPlacements)
                 {
-                    e.Graphics.DrawRectangle(new Pen(Color.Violet, 3), enemies.Rec);
+                    Image img = Image.FromFile(@"C:\Users\User-pc\Desktop\military_simulations_Project\military_simulations\military_simulations\images\solider.png");
+                    Bitmap bimage = new Bitmap(img);
+                    TextureBrush tx = new TextureBrush(bimage);
+                    tx.Transform = new Matrix(
+                       50.0f / 360.0f,
+                       0.0f,
+                       0.0f,
+                       50.0f / 420.0f,
+                       0.0f,
+                       0.0f);
+                    //e.Graphics.DrawRectangle(new Pen(Color.Violet, 3), enemies.Rec);
+                    e.Graphics.FillRectangle(tx, enemies.Rec);
                 }
 
                 // Display all RPG Sqauds
                 foreach (var rpg in listOfRPGSquads)
                 {
-                    e.Graphics.DrawRectangle(new Pen(Color.Orange, 3), rpg.Rec);
+                    Image img = Image.FromFile(@"C:\Users\User-pc\Desktop\military_simulations_Project\military_simulations\military_simulations\images\tank.png");
+                    Bitmap bimage = new Bitmap(img);
+                    TextureBrush tx = new TextureBrush(bimage);
+                    tx.Transform = new Matrix(
+                       50.0f / 507.0f,
+                       0.0f,
+                       0.0f,
+                       50.0f / 363.0f,
+                       0.0f,
+                       0.0f);
+                    e.Graphics.FillRectangle(tx, rpg.Rec);
+                    //e.Graphics.DrawRectangle(new Pen(Color.Orange, 3), rpg.Rec);
                 }
 
                 // Display all HomeBase Structures
@@ -273,16 +296,36 @@ namespace military_simulations
         #region BUTTON DRAW OBSTACLES
         private void Button1_Paint(object sender, PaintEventArgs e)
         {
-            Point p = new Point(btn_enemyemplacements.Width / 2 - 25, btn_enemyemplacements.Height / 2 - 25);
-            Rectangle rec = new Rectangle(p.X, p.Y, 50, 50);
-            e.Graphics.DrawRectangle(new Pen(Color.Violet, 2), rec);
+            Rectangle rec = new Rectangle(0, 0, 112, 86);
+            Image img = Image.FromFile(@"C:\Users\User-pc\Desktop\military_simulations_Project\military_simulations\military_simulations\images\solider.png");
+            Bitmap bimage = new Bitmap(img);
+            TextureBrush tx = new TextureBrush(bimage);
+            tx.Transform = new Matrix(
+               112.0f / 360.0f,
+               0.0f,
+               0.0f,
+               86.0f / 420.0f,
+               0.0f,
+               0.0f);
+            e.Graphics.FillRectangle(tx, rec);
+            //e.Graphics.DrawRectangle(new Pen(Color.Violet, 2), rec);
         }
 
         private void Btn_RPGsquads_Paint(object sender, PaintEventArgs e)
         {
-            Point p = new Point(btn_enemyemplacements.Width / 2 - 25, btn_enemyemplacements.Height / 2 - 25);
-            Rectangle rec = new Rectangle(p.X, p.Y, 50, 50);
-            e.Graphics.DrawRectangle(new Pen(Color.Orange, 2), rec);
+            Rectangle rec = new Rectangle(0, 0, 112, 86);
+            Image img = Image.FromFile(@"C:\Users\User-pc\Desktop\military_simulations_Project\military_simulations\military_simulations\images\tank.png");
+            Bitmap bimage = new Bitmap(img);
+            TextureBrush tx = new TextureBrush(bimage);
+            tx.Transform = new Matrix(
+               112.0f / 507.0f,
+               0.0f,
+               0.0f,
+               86.0f / 363.0f,
+               0.0f,
+               0.0f);
+            e.Graphics.FillRectangle(tx, rec);
+            //e.Graphics.DrawRectangle(new Pen(Color.Orange, 2), rec);
         }
         #endregion 
 

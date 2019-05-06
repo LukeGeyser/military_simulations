@@ -105,9 +105,13 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="images\aircraft.png" />
     <Content Include="images\armybg.jpg" />
     <Content Include="images\battleground.jpg" />
+    <Content Include="images\explosion.gif" />
     <Content Include="images\map.jpg" />
+    <Content Include="images\solider.png" />
+    <Content Include="images\tank.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
