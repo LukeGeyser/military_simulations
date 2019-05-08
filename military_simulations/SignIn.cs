@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Media;
 
 namespace military_simulations
 {
@@ -14,11 +15,14 @@ namespace military_simulations
     {
         DataHandler dh;
         Player player;
-
+        public static SoundPlayer atari;
+        public static int playerID;
         public SignIn()
         {
             InitializeComponent();
             dh = new DataHandler();
+            atari = new SoundPlayer("audio\\atari.wav");
+            atari.Play();
         }
 
         private void SignIn_Load(object sender, EventArgs e)
@@ -46,7 +50,9 @@ namespace military_simulations
                 {
                     MessageBox.Show("Successful Sign In", "Successful");
                     this.Hide();
-                    PickAircraft mg = new PickAircraft();
+                    Player p = dh.GetPLayerLogin(txt_Username.Text);
+                    playerID = p.Id;
+                    PickAircraft mg = new PickAircraft(p.Id);
                     mg.Show();
                 }
             }

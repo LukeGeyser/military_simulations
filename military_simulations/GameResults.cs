@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,13 +17,19 @@ namespace military_simulations
         List<double> allRecordedAltitudes;
         List<double> recordedHealth;
         List<double> recordedFuel;
-        public GameResults(List<double> speeds, List<double> altitudes, List<double> health, List<double> fuel)
+        List<Cell> enemyEmplacements;
+        List<Cell> tanks;
+
+        public GameResults(List<double> speeds, List<double> altitudes, List<double> health, List<double> fuel,
+            List<Cell> enemyEmplacements, List<Cell> tanks)
         {
             InitializeComponent();
             this.allRecordedSpeeds = speeds;
             this.allRecordedAltitudes = altitudes;
             this.recordedHealth = health;
             this.recordedFuel = fuel;
+            this.enemyEmplacements = enemyEmplacements;
+            this.tanks = tanks;
         }
 
         private void GameResults_Load(object sender, EventArgs e)
@@ -30,17 +37,18 @@ namespace military_simulations
             HealthFuelChartLoad();
             AltitudeChartLoad();
             SpeedChartLoad();
+            AddPlayerLog();
+            lbl_Aircraft.Text = PickAircraft.aircraftUsed;
+            if (enemyEmplacements != null || tanks != null)
+            {
+                lbl_EnemyEmp.Text = enemyEmplacements.Count.ToString();
+                lbl_Tanks.Text = tanks.Count.ToString();
+            }
         }
 
         private void Btn_Logout_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to Log Out?", "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
-            {
-                this.Hide();
-                SignIn signIn = new SignIn();
-                signIn.Show();
-            }
+
         }
 
         private void HealthFuelChartLoad()
@@ -145,6 +153,85 @@ namespace military_simulations
 
         }
 
+        private void LogoutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you want to Log Out?", "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                this.Hide();
+                SignIn signIn = new SignIn();
+                signIn.Show();
+            }
+        }
 
+        private void Btn_RPGsquads_Paint(object sender, PaintEventArgs e)
+        {
+            Rectangle rec = new Rectangle(0, 0, 112, 86);
+            Image img = Image.FromFile(@"C:\Users\User-pc\Desktop\military_simulations_Project\military_simulations\military_simulations\images\tank.png");
+            Bitmap bimage = new Bitmap(img);
+            TextureBrush tx = new TextureBrush(bimage);
+            tx.Transform = new Matrix(
+               112.0f / 507.0f,
+               0.0f,
+               0.0f,
+               86.0f / 363.0f,
+               0.0f,
+               0.0f);
+            e.Graphics.FillRectangle(tx, rec);
+        }
+
+        private void AddPlayerLog()
+        {
+            try
+            {
+                DataHandler dh = new DataHandler();
+                playerLog pl = new playerLog(MilitaryGame.playerID, recordedHealth.Min().ToString(), recordedFuel.Min().ToString(),
+                     allRecordedSpeeds.Max().ToString(), allRecordedAltitudes.Max().ToString(), PickAircraft.aircraftUsed);
+                dh.AddPlayerLog(pl);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("An error occurred when adding your results", "Error");
+            }
+        }
+
+        private void ViewPreviousResultsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            RestOfResults rs = new RestOfResults();
+            rs.Show();
+        }
+
+        private void Btn_enemyemplacements_Paint_1(object sender, PaintEventArgs e)
+        {
+            Rectangle rec = new Rectangle(0, 0, 112, 86);
+            Image img = Image.FromFile(@"C:\Users\User-pc\Desktop\military_simulations_Project\military_simulations\military_simulations\images\solider.png");
+            Bitmap bimage = new Bitmap(img);
+            TextureBrush tx = new TextureBrush(bimage);
+            tx.Transform = new Matrix(
+               112.0f / 360.0f,
+               0.0f,
+               0.0f,
+               86.0f / 420.0f,
+               0.0f,
+               0.0f);
+            e.Graphics.FillRectangle(tx, rec);
+        }
+
+        private void Btn_RPGsquads_Paint_1(object sender, PaintEventArgs e)
+        {
+            Rectangle rec = new Rectangle(0, 0, 112, 86);
+            Image img = Image.FromFile(@"C:\Users\User-pc\Desktop\military_simulations_Project\military_simulations\military_simulations\images\tank.png");
+            Bitmap bimage = new Bitmap(img);
+            TextureBrush tx = new TextureBrush(bimage);
+            tx.Transform = new Matrix(
+               112.0f / 507.0f,
+               0.0f,
+               0.0f,
+               86.0f / 363.0f,
+               0.0f,
+               0.0f);
+            e.Graphics.FillRectangle(tx, rec);
+        }
     }
 }

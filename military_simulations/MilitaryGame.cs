@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using System.Drawing.Drawing2D;
+using System.Media;
 
 namespace military_simulations
 {
@@ -55,6 +56,7 @@ namespace military_simulations
         int width = 50;
         int obstacleIndexX;
         int obstacleIndexY;
+        public static int playerID;
         #endregion
 
         #region Variables for Selecting Obstacles
@@ -88,6 +90,10 @@ namespace military_simulations
         bool noSolution = false;
         #endregion
 
+        #region Media Variables
+        public static SoundPlayer pacman = new SoundPlayer("audio\\pacman.wav");
+        #endregion
+
         private void PopulateHomeBase()
         {
             listOfHomeBase.Add(new Cell(hp1.X, hp1.Y, width));
@@ -109,9 +115,10 @@ namespace military_simulations
             listOfEnemyBase.Add(new Cell(ep8.X, ep8.Y, width));
         }
 
-        public MilitaryGame(string aircraftType)
+        public MilitaryGame(string aircraftType, int ID)
         {
             InitializeComponent();
+            playerID = ID;
             if (aircraftType == "a394Jet")
             {
                 a394Jet = new a394Jet();
@@ -450,6 +457,9 @@ namespace military_simulations
 
         private void Btn_Start_Click(object sender, EventArgs e)
         {
+            if(SignIn.atari != null)
+                SignIn.atari.Stop();
+            pacman.PlayLooping();
             closedSet = new List<Cell>(); ;
             openSet = new List<Cell>();
             // Initializing Start
@@ -557,7 +567,7 @@ namespace military_simulations
                         tlt_Fuel.ProgressBar.Value -= 1;
                         recordedFuel.Add(tlt_Fuel.ProgressBar.Value);
                         tlb_Fuel.Text = tlt_Fuel.Value + "%";
-                        Thread.Sleep(100);
+                        Thread.Sleep(500);
                         // To Determine the Speed and Altitude of Aircraft
                         counter++;
                         DetermineSpeedAndAltitude(path, counter);
@@ -610,7 +620,7 @@ namespace military_simulations
                         tlt_Fuel.ProgressBar.Value -= 1;
                         recordedFuel.Add(tlt_Fuel.ProgressBar.Value);
                         tlb_Fuel.Text = tlt_Fuel.Value + "%";
-                        Thread.Sleep(100);
+                        Thread.Sleep(500);
                         // To Determine the Speed and Altitude of Aircraft
                         counter++;
                         DetermineSpeedAndAltitude(path, counter);
@@ -649,6 +659,9 @@ namespace military_simulations
                 }
                 initialFlight = true;
             }
+            pacman.Stop();
+            if (SignIn.atari != null)
+                SignIn.atari.Play();
         }
 
         private void Btn_Signout_Click(object sender, EventArgs e)
@@ -761,7 +774,8 @@ namespace military_simulations
         {
             if (allRecordedSpeeds.Count > 0 || allRecordedAltitudes.Count > 0 || recordedHealth.Count > 0 || recordedFuel.Count > 0)
             {
-                GameResults gameResults = new GameResults(allRecordedSpeeds, allRecordedAltitudes, recordedHealth, recordedFuel);
+                GameResults gameResults = new GameResults(allRecordedSpeeds, allRecordedAltitudes, recordedHealth, recordedFuel,
+                    listOfEnemiesPlacements, listOfRPGSquads);
                 this.Hide();
                 gameResults.Show();
             }

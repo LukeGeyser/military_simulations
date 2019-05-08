@@ -50,6 +50,38 @@ namespace military_simulations
             return player;
         }
 
+        public List<playerLog> GetPlayerLog(int ID)
+        {
+            List<playerLog> player = new List<playerLog>();
+
+            conn.Open();
+            OleDbCommand cmd = new OleDbCommand("SELECT * FROM tblPlayer_Log WHERE playerId=" + "'" + ID + "'", conn);
+
+            dr = null;
+            dr = cmd.ExecuteReader();
+
+            while (dr.Read())
+            {
+                try
+                {
+                    player.Add(new playerLog(Convert.ToInt16(dr[0]), Convert.ToInt16(dr[1]), dr[2].ToString(), dr[3].ToString(), dr[4].ToString(), dr[5].ToString(), dr[6].ToString()));
+                }
+                catch (InvalidOperationException)
+                {
+
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Please make sure you fill all Inputs");
+                }
+            }
+
+            cmd.Dispose();
+            conn.Close();
+
+            return player;
+        }
+
         public void AddPlayer(Player player)
         {
             conn.Open();
@@ -58,6 +90,22 @@ namespace military_simulations
                 "'" + player.Username + "'," +
                 "'" + player.Password + "'," +
                 "'" + player.Dob + "')";
+            OleDbCommand cmd = new OleDbCommand(command, conn);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            conn.Close();
+        }
+
+        public void AddPlayerLog(playerLog player)
+        {
+            conn.Open();
+            string command = "INSERT INTO tblPlayer_Log (playerID, Health, Fuel, MaxSpeed, MaxAltitude, AircraftUsed) VALUES (" +
+                "'" + player.PlayerId + "'," +
+                "'" + player.Health + "'," +
+                "'" + player.Fuel + "'," +
+                "'" + player.MaxSpeed + "'," +
+                "'" + player.MaxAltitude + "'," +
+                "'" + player.AircraftUsed + "')";
             OleDbCommand cmd = new OleDbCommand(command, conn);
             cmd.ExecuteNonQuery();
             cmd.Dispose();

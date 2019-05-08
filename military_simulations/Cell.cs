@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace military_simulations
 {
-    class Cell
+    public class Cell
     {
         private double f = 0;
         private double g = 0;

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Media;
 
 namespace military_simulations
 {
@@ -14,6 +15,7 @@ namespace military_simulations
     {
         DataHandler dh;
         Player player;
+
 
         public SignUp()
         {
@@ -32,7 +34,8 @@ namespace military_simulations
                     MessageBox.Show("Player Added Successfully", "TIME TO GAME!!");
                     dh.AddPlayer(player);
                     this.Hide();
-                    PickAircraft sn = new PickAircraft();
+                    Player p = dh.GetPLayerLogin(txt_Username.Text);
+                    PickAircraft sn = new PickAircraft(p.Id);
                     sn.Show();
                 }
                 else if (CheckDates(dt) == false)
